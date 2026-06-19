@@ -1,6 +1,6 @@
 #include "../include/sblib.h"
 
-void sbResetTimedEvent(sbTimedEvent *event, float delay, Sound soundEffect) {
+void resetTimedEvent(timedEvent *event, float delay, Sound soundEffect) {
   event->triggered = false;
   event->delay = delay;
   event->timer = 0.0f;
@@ -9,7 +9,7 @@ void sbResetTimedEvent(sbTimedEvent *event, float delay, Sound soundEffect) {
   event->soundEffect = soundEffect;
 }
 
-bool sbUpdateTimedEvent(sbTimedEvent *event) {
+bool updateTimedEvent(timedEvent *event) {
   if (!event->triggered) {
     event->timer += GetFrameTime();
 

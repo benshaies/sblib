@@ -7,29 +7,29 @@
 typedef struct {
   int *data;
   int size;
-} SBIntArray;
+} intArray;
 
 typedef struct {
   int **data;
   int rows;
   int cols;
-} SBIntArray2D;
+} intArray2D;
 
-void sbIntArrayInit(SBIntArray *array, int size);
+void intArrayInit(intArray *array, int size);
 
-void sbIntArray2DInit(SBIntArray2D *array, int rows, int cols);
+void intArray2DInit(intArray2D *array, int rows, int cols);
 
-void sbCsvToArray(SBIntArray2D *array, const char *filename);
+void csvToArray(intArray2D *array, const char *filename);
 
 // CAMERA FUNCTIONS
 // ****************************************************************8
-void sbUpdateCameraShake(Camera2D *cam, int *screenShakeLenght,
-                         int screenShakeStrenght, Vector2 windowSize);
+void updateCameraShake(Camera2D *cam, int *screenShakeLenght,
+                       int screenShakeStrenght, Vector2 windowSize);
 
 // DRAWING ****************************************************************
 
-void sbGameResolutionDraw(Vector2 windowSize, RenderTexture2D *target,
-                          Vector2 *mousePos);
+void gameResolutionDraw(Vector2 windowSize, RenderTexture2D *target,
+                        Vector2 *mousePos);
 
 // TIMED EVENT ****************************************************************
 
@@ -40,11 +40,11 @@ typedef struct {
   bool particlesTriggered;
 
   Sound soundEffect;
-} sbTimedEvent;
+} timedEvent;
 
-void resetTimedEvent(sbTimedEvent *event, float delay, Sound soundEffect);
+void resetTimedEvent(timedEvent *event, float delay, Sound soundEffect);
 
-bool updateTimedEvent(sbTimedEvent *event);
+bool updateTimedEvent(timedEvent *event);
 
 // PARTICLES
 // ********************************************************************
