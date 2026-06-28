@@ -108,10 +108,25 @@ void animationInit(Animation *animation, float timer, Texture2D texture,
 void playAnimation(Animation *animation, Rectangle destination, int direction,
                    float speed);
 
-void drawAnimationFrame(Animation *animation, Rectangle destination,
-                        int direction, int frameNum);
+void drawAnimatrionFrame(Animation *animation, Rectangle destination,
+                         int direction, int frameNum);
 
 bool playAnimationOnce(Animation *animation, Rectangle destination,
                        int direction, float speed);
 
 #endif
+
+// LEVEL DATA
+// *************************************************************************
+
+typedef struct {
+  intArray2D *array;
+  int arrayRows;
+  int arrayCols;
+
+  int layerCount;
+  Texture2D texture;
+} LevelData;
+
+LevelData LevelDataInit(int layers, Texture2D texture, int arrayRows,
+                        int arrayCols);

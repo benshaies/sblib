@@ -40,7 +40,7 @@ endif()
 # Define source files
 file(GLOB SBLIB_SRC "src/*.c")
 # Create executable
-add_executable(${PROJECT_NAME} test.c ${SBLIB_SRC})
+add_executable(${PROJECT_NAME} testing.c ${SBLIB_SRC})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} ${PLATFORM_LIBS})
