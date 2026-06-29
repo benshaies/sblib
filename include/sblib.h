@@ -116,17 +116,32 @@ bool playAnimationOnce(Animation *animation, Rectangle destination,
 
 #endif
 
-// LEVEL DATA
+// LEVEL DATA - levelData.c
 // *************************************************************************
 
 typedef struct {
-  intArray2D *array;
+  Texture2D texture;
+  int width;
+  int height;
+  int tileWidth;
+  int tileHeight;
+} Tileset;
+
+typedef struct {
+  intArray2D *layer;
   int arrayRows;
   int arrayCols;
 
   int layerCount;
-  Texture2D texture;
+  Tileset tileset;
+
+  int tilesetSize;
 } LevelData;
 
-LevelData LevelDataInit(int layers, Texture2D texture, int arrayRows,
+LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
+
+void levelDataDraw(LevelData *level, Camera2D cam);
+
+Tileset tilesetInit(Texture2D texture, int width, int height, int tileWidth,
+                    int tileHeight);
