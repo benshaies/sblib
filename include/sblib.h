@@ -123,25 +123,23 @@ typedef struct {
   Texture2D texture;
   int width;
   int height;
-  int tileWidth;
-  int tileHeight;
+
+  int tileSize;
+
 } Tileset;
 
 typedef struct {
   intArray2D *layer;
-  int arrayRows;
-  int arrayCols;
 
   int layerCount;
   Tileset tileset;
 
-  int tilesetSize;
 } LevelData;
 
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
 
-void levelDataDraw(LevelData *level, Camera2D cam);
+void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
+                   int drawTileHeight);
 
-Tileset tilesetInit(Texture2D texture, int width, int height, int tileWidth,
-                    int tileHeight);
+Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize);

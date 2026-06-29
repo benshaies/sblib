@@ -19,5 +19,5 @@ game
 .cache/
 compile_commands.json
 .vscode/
-
+levelTileset.png
 

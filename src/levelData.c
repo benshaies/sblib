@@ -1,4 +1,5 @@
 #include "../include/sblib.h"
+#include <raylib.h>
 #include <stdlib.h>
 
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
@@ -15,17 +16,41 @@ LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
   return levelData;
 }
 
-void levelDataDraw(LevelData *level, Camera2D cam) {}
+void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
+                   int drawTileHeight) {
 
-Tileset tilesetInit(Texture2D texture, int width, int height, int tileWidth,
-                    int tileHeight) {
+  for (int l = 0; l < level.layerCount; l++) {
+
+    for (int i = 0; i < level.layer[l].rows; i++) {
+      for (int j = 0; j < level.layer[l].cols; j++) {
+
+        int tile = level.layer[l].data[i][j];
+
+        Rectangle sourceRec = {
+            (level.layer[l].data[i][j] % level.tileset.width) *
+                level.tileset.tileSize,
+            (level.layer[l].data[i][j] / level.tileset.width) *
+                level.tileset.tileSize,
+            level.tileset.tileSize,
+            level.tileset.tileSize,
+        };
+
+        DrawTexturePro(level.tileset.texture, sourceRec,
+                       (Rectangle){j * drawTileWidth, i * drawTileHeight,
+                                   drawTileWidth, drawTileHeight},
+                       (Vector2){0, 0}, 0.0f, WHITE);
+      }
+    }
+  }
+}
+
+Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize) {
   Tileset tileset;
 
   tileset.texture = texture;
   tileset.width = width;
   tileset.height = height;
-  tileset.tileWidth = tileWidth;
-  tileset.tileHeight = tileHeight;
+  tileset.tileSize = tileSize;
 
   return tileset;
 }
