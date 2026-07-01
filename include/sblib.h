@@ -143,8 +143,7 @@ typedef struct {
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
 
-void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
-                   int drawTileHeight);
+void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight);
 
 void levelDataFree(LevelData *level);
 

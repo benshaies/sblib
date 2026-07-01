@@ -1,7 +1,6 @@
 #include "include/sblib.h"
 #include <raylib.h>
 #include <stdio.h>
-
 LevelData level;
 
 Tileset tileset;
@@ -13,8 +12,6 @@ void draw() {
   BeginDrawing();
 
   ClearBackground(RAYWHITE);
-
-  levelDataDraw(level, cam, 50, 50);
 
   EndDrawing();
 }
