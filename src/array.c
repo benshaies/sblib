@@ -11,6 +11,12 @@ void intArrayInit(intArray *array, int size) {
   }
 }
 
+void intArrayFree(intArray *array) {
+  free((array->data));
+  array->data = NULL;
+  array->size = 0;
+}
+
 void intArray2DInit(intArray2D *array, int rows, int cols) {
   array->rows = rows;
   array->cols = cols;
@@ -21,9 +27,28 @@ void intArray2DInit(intArray2D *array, int rows, int cols) {
 
   for (int y = 0; y < rows; y++) {
     for (int x = 0; x < cols; x++) {
-      array->data[y][x] = -69;
+      array->data[y][x] = 0;
     }
   }
+}
+
+void intArray2DFree(intArray2D *array) {
+  if (array == NULL || array->data == NULL)
+    return;
+
+  // 1. Free each individual row block
+  for (int i = 0; i < array->rows; i++) {
+    free(array->data[i]);
+    array->data[i] = NULL; // Clear the pointer for safety
+  }
+
+  // 2. Free the master list pointer array
+  free(array->data);
+  array->data = NULL; // Clear the master pointer
+
+  // 3. Reset dimensions
+  array->rows = 0;
+  array->cols = 0;
 }
 
 void csvToArray(intArray2D *array, const char *filename) {

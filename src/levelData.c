@@ -44,6 +44,17 @@ void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
   }
 }
 
+void levelDataFree(LevelData *level) {
+  for (int i = 0; i < level->layerCount; i++) {
+    free(level->layer[i].data);
+    level->layer[i].data = NULL;
+  }
+
+  free(level->layer);
+  level->layer = NULL;
+  level->layerCount = 0;
+}
+
 Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize) {
   Tileset tileset;
 

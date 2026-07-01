@@ -17,7 +17,11 @@ typedef struct {
 
 void intArrayInit(intArray *array, int size);
 
+void freeIntArray(intArray *array);
+
 void intArray2DInit(intArray2D *array, int rows, int cols);
+
+void freeIntArray2DInit(intArray2D *array);
 
 void csvToArray(intArray2D *array, const char *filename);
 
@@ -141,5 +145,7 @@ LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
 
 void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
                    int drawTileHeight);
+
+void levelDataFree(LevelData *level);
 
 Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize);
