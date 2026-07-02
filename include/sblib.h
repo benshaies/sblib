@@ -118,8 +118,6 @@ void drawAnimatrionFrame(Animation *animation, Rectangle destination,
 bool playAnimationOnce(Animation *animation, Rectangle destination,
                        int direction, float speed);
 
-#endif
-
 // LEVEL DATA - levelData.c
 // *************************************************************************
 
@@ -148,3 +146,5 @@ void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight);
 void levelDataFree(LevelData *level);
 
 Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize);
+
+#endif

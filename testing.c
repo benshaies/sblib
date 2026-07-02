@@ -1,6 +1,8 @@
 #include "include/sblib.h"
+#include "sbTiles/sbTiles.h"
 #include <raylib.h>
 #include <stdio.h>
+
 LevelData level;
 
 Tileset tileset;
