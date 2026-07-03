@@ -10,10 +10,14 @@ Texture2D tilesetTexture;
 
 Camera2D cam;
 
+intArray array;
+
 void draw() {
   BeginDrawing();
 
   ClearBackground(RAYWHITE);
+
+  sbTilesDraw(level);
 
   EndDrawing();
 }
@@ -27,12 +31,6 @@ void init() {
   tileset = tilesetInit(tilesetTexture, 8, 8, 16);
 
   level = levelDataInit(1, tileset, 10, 10);
-
-  for (int i = 0; i < level.layer[0].rows; i++) {
-    for (int j = 0; j < level.layer[0].cols; j++) {
-      level.layer[0].data[i][j] = 0;
-    }
-  }
 }
 
 int main() {

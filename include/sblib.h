@@ -5,24 +5,29 @@
 // CUSTOM ARRAY
 
 typedef struct {
-  int *data;
-  int size;
+  int *data; // Main array
+  int size;  // Total size
 } intArray;
 
 typedef struct {
-  int **data;
+  int **data; // Main Array
   int rows;
   int cols;
-} intArray2D;
+} intArray2D; // 2D int array carring size
 
+// Initliaze and allocate intArray
 void intArrayInit(intArray *array, int size);
 
+// Free intArray memory
 void freeIntArray(intArray *array);
 
+// Initliaze and allocate intArray2D
 void intArray2DInit(intArray2D *array, int rows, int cols);
 
+// Free intArray2D memory
 void freeIntArray2DInit(intArray2D *array);
 
+// Convert a csv file into an integer array
 void csvToArray(intArray2D *array, const char *filename);
 
 // CAMERA FUNCTIONS
@@ -38,16 +43,18 @@ void gameResolutionDraw(Vector2 windowSize, RenderTexture2D *target,
 // TIMED EVENT ****************************************************************
 
 typedef struct {
-  float timer;
-  float delay;
-  bool triggered;
-  bool particlesTriggered;
+  float timer;             // Tracks time
+  float delay;             // Amount of time to wait
+  bool triggered;          // Is it triggered?
+  bool particlesTriggered; // Has particles been triggered?
 
-  Sound soundEffect;
-} timedEvent;
+  Sound soundEffect; // Sound effect triggered?
+} timedEvent;        // Simple event with a time delay and tracking
 
+// Reset and or Initliaze timedEvent
 void resetTimedEvent(timedEvent *event, float delay, Sound soundEffect);
 
+// Update timedEvent
 bool updateTimedEvent(timedEvent *event);
 
 // PARTICLES
@@ -56,8 +63,8 @@ bool updateTimedEvent(timedEvent *event);
 #define MAX_PARTICLES 1024
 
 typedef enum {
-  NORMAL,
-  EXPANDING_RING,
+  NORMAL,         // Normal square or cirlces
+  EXPANDING_RING, // Circular expanding ring
 } ParticleType;
 
 typedef struct {
@@ -82,39 +89,47 @@ typedef struct {
   Particle pool[MAX_PARTICLES];
 } ParticleSystem;
 
+// Spawn normal particles
 void spawnParticles(ParticleSystem *ps, Vector2 pos, float lifeMax, Color color,
                     Vector2 velocity, float size);
 
+// Spawn expanding ring particle
 void spawnParticlesExpandingRing(ParticleSystem *ps, Vector2 pos, float lifeMax,
                                  Color color, float size, float expandingRate,
                                  float ringThickness);
 
+// Update all particles
 void updateParticles(ParticleSystem *ps);
 
+// Draw all particles
 void drawParticles(ParticleSystem *ps);
 
 // ANIMATIONS
 // **********************************************************************
 
 typedef struct {
-  float timer;
+  float timer; // Tracks time
   Texture2D texture;
-  int size;
-  int frameCount;
+  int size;       // pixel size of each frame
+  int frameCount; //  Total frames
   int currentFrame;
   int direction;
-  int yPos;
+  int yPos; // Y position on sprite sheet
 } Animation;
 
+// Create animation
 void animationInit(Animation *animation, float timer, Texture2D texture,
                    int size, int frameCount, int currentFrame, int yPos);
 
+// Play and draw animation
 void playAnimation(Animation *animation, Rectangle destination, int direction,
                    float speed);
 
+// Draw one specific frame from animation
 void drawAnimatrionFrame(Animation *animation, Rectangle destination,
                          int direction, int frameNum);
 
+// Play animation once and return true when done
 bool playAnimationOnce(Animation *animation, Rectangle destination,
                        int direction, float speed);
 

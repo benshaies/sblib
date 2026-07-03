@@ -16,8 +16,7 @@ LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
   return levelData;
 }
 
-void levelDataDraw(LevelData level, Camera2D cam, int drawTileWidth,
-                   int drawTileHeight) {
+void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight) {
 
   for (int l = 0; l < level.layerCount; l++) {
 

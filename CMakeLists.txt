@@ -39,8 +39,9 @@ endif()
 
 # Define source files
 file(GLOB SBLIB_SRC "src/*.c")
+set(SBTILES_SRC "sbTiles/sbTiles.c")
 # Create executable
-add_executable(${PROJECT_NAME} testing.c ${SBLIB_SRC})
+add_executable(${PROJECT_NAME} testing.c ${SBLIB_SRC} ${SBTILES_SRC})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} ${PLATFORM_LIBS})
