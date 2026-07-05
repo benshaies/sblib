@@ -143,7 +143,7 @@ typedef struct {
 
   int tileSize;
 
-} Tileset;
+} Tileset; // Tileset variable
 
 typedef struct {
   intArray2D *layer;
@@ -151,15 +151,19 @@ typedef struct {
   int layerCount;
   Tileset tileset;
 
-} LevelData;
+} LevelData; // Level Data struct
 
+// Initliaze level data struct
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
 
+// Draw level Data
 void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight);
 
+// Free level data
 void levelDataFree(LevelData *level);
 
+// Initliaze tileset struct
 Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize);
 
 #endif
