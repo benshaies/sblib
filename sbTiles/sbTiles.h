@@ -7,6 +7,6 @@ void sbTilesInit();
 
 void sbTilesUpdate(LevelData *currentLevel, bool active, Vector2 mousePos);
 
-void sbTilesDraw(LevelData currentLevel);
+void sbTilesDraw(LevelData currentLevel, int drawTileWidth, int drawTileHeight);
 
 #endif
