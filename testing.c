@@ -38,6 +38,8 @@ int main() {
   init();
   while (!WindowShouldClose()) {
     draw();
+
+    sbTilesUpdate(&level, GetMousePosition());
   }
 
   return 0;
