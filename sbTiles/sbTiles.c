@@ -17,7 +17,7 @@ void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
         currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
         currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
 
-    int x = 5;
+    int x = 7;
     int y = 5;
 
     currentLevel->layer[sbt.currentLayer].data[y][x] = -10;
