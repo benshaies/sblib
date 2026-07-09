@@ -11,18 +11,40 @@ void sbTilesInit() {
 
 void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
 
-  if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-    Vector2 currentLevelSize = {
-        currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
-        currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
-    Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
-    int y, x;
-    if (CheckCollisionPointRec(mousePos, level)) {
-      x = mousePos.x / sbt.currentDrawSize.x;
-      y = mousePos.y / sbt.currentDrawSize.y;
-      currentLevel->layer[sbt.currentLayer].data[y][x] = 30;
+  if (IsKeyPressed(KEY_F2)) {
+    sbt.showTileSelection = !sbt.showTileSelection;
+  }
+
+  // Level editing mode
+  if (!sbt.showTileSelection) {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      Vector2 currentLevelSize = {
+          currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
+          currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
+      Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
+      int y, x;
+      if (CheckCollisionPointRec(mousePos, level)) {
+        x = mousePos.x / sbt.currentDrawSize.x;
+        y = mousePos.y / sbt.currentDrawSize.y;
+        currentLevel->layer[sbt.currentLayer].data[y][x] = 30;
+      }
     }
   }
+  // Tile selection mode
+  else {
+  }
+}
+
+void drawTileset(LevelData currentLevel) {
+
+  Rectangle sourceRec = {
+      0, 0, currentLevel.tileset.width * currentLevel.tileset.tileSize,
+      currentLevel.tileset.height * currentLevel.tileset.tileSize};
+
+  Rectangle destRec = {0, 0, 250, 250};
+
+  DrawTexturePro(currentLevel.tileset.texture, sourceRec, destRec,
+                 (Vector2){0, 0}, 0.0, WHITE);
 }
 
 void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
@@ -47,5 +69,9 @@ void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
                     i * drawTileHeight},
           5.0, BLUE);
     }
+  }
+
+  if (sbt.showTileSelection) {
+    drawTileset(currentLevel);
   }
 }

@@ -7,7 +7,17 @@
 typedef struct {
   int currentLayer;
   Vector2 currentDrawSize;
+
+  int selectedTile;
+
+  bool showTileSelection;
 } SBTILES;
+
+typedef enum {
+  TILE_SELECTION,
+  LEVEL_EDITING,
+
+} SBT_STATE;
 
 // Initialize sbTiles struct
 void sbTilesInit();
