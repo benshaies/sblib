@@ -12,15 +12,16 @@ void sbTilesInit() {
 void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
 
   if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-
     Vector2 currentLevelSize = {
         currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
         currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
-
-    int x = 7;
-    int y = 5;
-
-    currentLevel->layer[sbt.currentLayer].data[y][x] = -10;
+    Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
+    int y, x;
+    if (CheckCollisionPointRec(mousePos, level)) {
+      x = mousePos.x / sbt.currentDrawSize.x;
+      y = mousePos.y / sbt.currentDrawSize.y;
+      currentLevel->layer[sbt.currentLayer].data[y][x] = 30;
+    }
   }
 }
 

@@ -17,7 +17,7 @@ void draw() {
 
   ClearBackground(RAYWHITE);
 
-  sbTilesDraw(level, 40, 40);
+  sbTilesDraw(level, 100, 100);
 
   EndDrawing();
 }
@@ -30,7 +30,7 @@ void init() {
 
   tileset = tilesetInit(tilesetTexture, 8, 8, 16);
 
-  level = levelDataInit(1, tileset, 15, 15);
+  level = levelDataInit(1, tileset, 10, 10);
 }
 
 int main() {

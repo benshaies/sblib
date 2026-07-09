@@ -7,7 +7,7 @@ void intArrayInit(intArray *array, int size) {
   array->size = size;
 
   for (int i = 0; i < size; i++) {
-    array->data[i] = 0;
+    array->data[i] = -1;
   }
 }
 
@@ -27,7 +27,7 @@ void intArray2DInit(intArray2D *array, int rows, int cols) {
 
   for (int y = 0; y < rows; y++) {
     for (int x = 0; x < cols; x++) {
-      array->data[y][x] = 0;
+      array->data[y][x] = -1;
     }
   }
 }

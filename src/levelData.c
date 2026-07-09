@@ -24,12 +24,12 @@ void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight) {
       for (int j = 0; j < level.layer[l].cols; j++) {
 
         int tile = level.layer[l].data[i][j];
+        if (tile < 0)
+          continue; // no tile here, skip draw
 
         Rectangle sourceRec = {
-            (level.layer[l].data[i][j] % level.tileset.width) *
-                level.tileset.tileSize,
-            (level.layer[l].data[i][j] / level.tileset.width) *
-                level.tileset.tileSize,
+            (tile % level.tileset.width) * level.tileset.tileSize,
+            (tile / level.tileset.width) * level.tileset.tileSize,
             level.tileset.tileSize,
             level.tileset.tileSize,
         };
