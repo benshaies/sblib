@@ -4,20 +4,23 @@
 #include "../include/sblib.h"
 #include <raylib.h>
 
+typedef enum {
+  TILE_SELECTION,
+  LEVEL_EDITING,
+
+} SBT_STATE;
+
 typedef struct {
   int currentLayer;
   Vector2 currentDrawSize;
 
   int selectedTile;
 
-  bool showTileSelection;
+  SBT_STATE currentState;
+
+  Rectangle tileSelectionRec;
+
 } SBTILES;
-
-typedef enum {
-  TILE_SELECTION,
-  LEVEL_EDITING,
-
-} SBT_STATE;
 
 // Initialize sbTiles struct
 void sbTilesInit();

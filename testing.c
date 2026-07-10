@@ -31,6 +31,8 @@ void init() {
   tileset = tilesetInit(tilesetTexture, 8, 8, 16);
 
   level = levelDataInit(1, tileset, 10, 10);
+
+  sbTilesInit();
 }
 
 int main() {
