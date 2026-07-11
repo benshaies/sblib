@@ -7,7 +7,7 @@ SBTILES sbt;
 void sbTilesInit() {
   sbt.currentDrawSize = (Vector2){0, 0};
   sbt.currentLayer = 0;
-  sbt.selectedTile = 0;
+  sbt.selectedTile = 30;
 
   sbt.currentState = LEVEL_EDITING;
 
@@ -57,6 +57,11 @@ void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
     sbt.tileSelectionRec.width *= 0.975;
     sbt.tileSelectionRec.height *= 0.975;
   }
+
+  // Selecting new tile from tile selection
+  if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
+      CheckCollisionPointRec(mousePos, sbt.tileSelectionRec)) {
+  }
 }
 
 void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
@@ -89,6 +94,18 @@ void drawTileset(LevelData currentLevel) {
 
   DrawTexturePro(currentLevel.tileset.texture, sourceRec, sbt.tileSelectionRec,
                  (Vector2){0, 0}, 0.0, WHITE);
+
+  // Highlight current selected Tile
+  Rectangle highlightRec = {
+      (sbt.selectedTile % currentLevel.tileset.width) *
+          (sbt.tileSelectionRec.width / currentLevel.tileset.width),
+      (sbt.selectedTile / currentLevel.tileset.width) *
+          (sbt.tileSelectionRec.height / currentLevel.tileset.height),
+      sbt.tileSelectionRec.width / currentLevel.tileset.width,
+      sbt.tileSelectionRec.height / currentLevel.tileset.height,
+  };
+
+  DrawRectangleRec(highlightRec, Fade(BLUE, 0.5));
 }
 
 void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
