@@ -61,6 +61,17 @@ void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
   // Selecting new tile from tile selection
   if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
       CheckCollisionPointRec(mousePos, sbt.tileSelectionRec)) {
+    int currentTileWidth =
+        sbt.tileSelectionRec.width / currentLevel->tileset.width;
+    int currentTileHeight =
+        sbt.tileSelectionRec.height / currentLevel->tileset.height;
+
+    int col = (int)(mousePos.x - sbt.tileSelectionRec.x) / currentTileWidth;
+    int row = (int)(mousePos.y - sbt.tileSelectionRec.y) / currentTileHeight;
+
+    int selectedTile = row * currentLevel->tileset.width + col;
+
+    sbt.selectedTile = selectedTile;
   }
 }
 
