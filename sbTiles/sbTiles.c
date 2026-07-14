@@ -4,17 +4,48 @@
 
 SBTILES sbt;
 
-void sbTilesInit() {
+int scroll;
+Vector2 worldMouse;
+
+void sbTilesInit(int windowWidth, int windowHeight) {
   sbt.currentDrawSize = (Vector2){0, 0};
   sbt.currentLayer = 0;
   sbt.selectedTile = 30;
+
+  sbt.showTileLines = true;
+
+  sbt.cam.target = (Vector2){windowWidth / 2, windowHeight / 2};
+  sbt.cam.offset = sbt.cam.target;
+  sbt.cam.zoom = 1.0f;
 
   sbt.currentState = LEVEL_EDITING;
 
   sbt.tileSelectionRec = (Rectangle){0, 0, 250, 250};
 }
 
+void updateCamera() {
+  int scroll = GetMouseWheelMove();
+
+  if (scroll > 0) {
+    sbt.cam.zoom += 0.05;
+    sbt.cam.target = worldMouse;
+  } else if (scroll < 0 && sbt.cam.zoom >= 0.1) {
+    sbt.cam.zoom -= 0.1;
+  }
+}
+
 void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
+
+  // update mouse position
+  worldMouse = GetScreenToWorld2D(GetMousePosition(), sbt.cam);
+
+  // Update camera
+  updateCamera();
+
+  // Hide Lines
+  if (IsKeyPressed(KEY_TAB)) {
+    sbt.showTileLines = !sbt.showTileLines;
+  }
 
   // Placing tiles
   if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -23,9 +54,9 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
         currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
     Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
     int y, x;
-    if (CheckCollisionPointRec(mousePos, level)) {
-      x = mousePos.x / sbt.currentDrawSize.x;
-      y = mousePos.y / sbt.currentDrawSize.y;
+    if (CheckCollisionPointRec(worldMouse, level)) {
+      x = worldMouse.x / sbt.currentDrawSize.x;
+      y = worldMouse.y / sbt.currentDrawSize.y;
       currentLevel->layer[sbt.currentLayer].data[y][x] = sbt.selectedTile;
     }
   }
@@ -37,10 +68,10 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
         currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
     Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
     int y, x;
-    x = mousePos.x / sbt.currentDrawSize.x;
-    y = mousePos.y / sbt.currentDrawSize.y;
+    x = worldMouse.x / sbt.currentDrawSize.x;
+    y = worldMouse.y / sbt.currentDrawSize.y;
 
-    if (CheckCollisionPointRec(mousePos, level) &&
+    if (CheckCollisionPointRec(worldMouse, level) &&
         currentLevel->layer[sbt.currentLayer].data[y][x] >= 0) {
       currentLevel->layer[sbt.currentLayer].data[y][x] = -1;
     }
@@ -87,6 +118,7 @@ void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
     if (IsKeyPressed(KEY_F2)) {
       sbt.currentState = TILE_SELECTION;
     }
+
     break;
   }
 }
@@ -124,26 +156,33 @@ void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
 
   case LEVEL_EDITING:
 
+    BeginMode2D(sbt.cam);
+
     levelDataDraw(currentLevel, drawTileWidth, drawTileHeight);
 
     sbt.currentDrawSize = (Vector2){drawTileWidth, drawTileHeight};
 
-    for (int i = 0; i < currentLevel.layer[sbt.currentLayer].rows; i++) {
-      for (int j = 0; j < currentLevel.layer[sbt.currentLayer].cols; j++) {
+    if (sbt.showTileLines) {
 
-        DrawLineEx((Vector2){j * drawTileWidth, 0},
-                   (Vector2){j * drawTileWidth,
-                             currentLevel.layer[sbt.currentLayer].rows *
-                                 drawTileHeight},
-                   5.0, YELLOW);
+      for (int i = 0; i < currentLevel.layer[sbt.currentLayer].rows; i++) {
+        for (int j = 0; j < currentLevel.layer[sbt.currentLayer].cols; j++) {
 
-        DrawLineEx(
-            (Vector2){0, i * drawTileHeight},
-            (Vector2){drawTileWidth * currentLevel.layer[sbt.currentLayer].cols,
-                      i * drawTileHeight},
-            5.0, BLUE);
+          DrawLineEx((Vector2){j * drawTileWidth, 0},
+                     (Vector2){j * drawTileWidth,
+                               currentLevel.layer[sbt.currentLayer].rows *
+                                   drawTileHeight},
+                     7.5, BLACK);
+
+          DrawLineEx((Vector2){0, i * drawTileHeight},
+                     (Vector2){drawTileWidth *
+                                   currentLevel.layer[sbt.currentLayer].cols,
+                               i * drawTileHeight},
+                     7.5, BLACK);
+        }
       }
     }
+
+    EndMode2D();
 
     break;
   }

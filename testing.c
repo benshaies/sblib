@@ -32,7 +32,7 @@ void init() {
 
   level = levelDataInit(1, tileset, 20, 20);
 
-  sbTilesInit();
+  sbTilesInit(1000, 1000);
 }
 
 int main() {

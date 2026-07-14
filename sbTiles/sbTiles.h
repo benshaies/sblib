@@ -13,6 +13,9 @@ typedef enum {
 typedef struct {
   int currentLayer;
   Vector2 currentDrawSize;
+  Camera2D cam;
+
+  bool showTileLines;
 
   int selectedTile;
 
@@ -23,7 +26,7 @@ typedef struct {
 } SBTILES;
 
 // Initialize sbTiles struct
-void sbTilesInit();
+void sbTilesInit(int windowWidth, int windowHeight);
 
 // All main updates to sbTiles
 void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos);
