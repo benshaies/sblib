@@ -39,6 +39,7 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
     int y, x;
     x = mousePos.x / sbt.currentDrawSize.x;
     y = mousePos.y / sbt.currentDrawSize.y;
+
     if (CheckCollisionPointRec(mousePos, level) &&
         currentLevel->layer[sbt.currentLayer].data[y][x] >= 0) {
       currentLevel->layer[sbt.currentLayer].data[y][x] = -1;
@@ -49,11 +50,8 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
 void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
   if (IsKeyDown(KEY_UP)) {
     sbt.tileSelectionRec.width *= 1.025;
-
     sbt.tileSelectionRec.height *= 1.025;
-  }
-
-  else if (IsKeyDown(KEY_DOWN)) {
+  } else if (IsKeyDown(KEY_DOWN)) {
     sbt.tileSelectionRec.width *= 0.975;
     sbt.tileSelectionRec.height *= 0.975;
   }
@@ -76,15 +74,12 @@ void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
 }
 
 void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
-
   switch (sbt.currentState) {
   case TILE_SELECTION:
     if (IsKeyPressed(KEY_F2)) {
       sbt.currentState = LEVEL_EDITING;
     }
-
     tileSelectionUpdate(currentLevel, mousePos);
-
     break;
 
   case LEVEL_EDITING:
@@ -92,7 +87,6 @@ void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
     if (IsKeyPressed(KEY_F2)) {
       sbt.currentState = TILE_SELECTION;
     }
-
     break;
   }
 }
