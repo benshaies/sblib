@@ -16,16 +16,22 @@ LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
   return levelData;
 }
 
-void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight) {
+void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight,
+                   int drawLayer) {
 
-  for (int l = 0; l < level.layerCount; l++) {
+  bool noLayering = false;
+  if (drawLayer != -1)
+    noLayering = true;
 
+  int startLayer = noLayering ? drawLayer : 0;
+  int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
+
+  for (int l = startLayer; l < endLayer; l++) {
     for (int i = 0; i < level.layer[l].rows; i++) {
       for (int j = 0; j < level.layer[l].cols; j++) {
-
         int tile = level.layer[l].data[i][j];
         if (tile < 0)
-          continue; // no tile here, skip draw
+          continue;
 
         Rectangle sourceRec = {
             (tile % level.tileset.width) * level.tileset.tileSize,
@@ -33,7 +39,6 @@ void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight) {
             level.tileset.tileSize,
             level.tileset.tileSize,
         };
-
         DrawTexturePro(level.tileset.texture, sourceRec,
                        (Rectangle){j * drawTileWidth, i * drawTileHeight,
                                    drawTileWidth, drawTileHeight},

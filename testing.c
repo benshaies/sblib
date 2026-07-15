@@ -30,7 +30,7 @@ void init() {
 
   tileset = tilesetInit(tilesetTexture, 8, 8, 16);
 
-  level = levelDataInit(1, tileset, 20, 20);
+  level = levelDataInit(5, tileset, 50, 50);
 
   sbTilesInit(1000, 1000);
 }

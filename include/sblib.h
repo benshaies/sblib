@@ -157,8 +157,10 @@ typedef struct {
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
 
-// Draw level Data
-void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight);
+// Draw level Data - specificLayer meaning -1:Draw normally | anything else draw
+// specific Layer only
+void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight,
+                   int drawLayer);
 
 // Free level data
 void levelDataFree(LevelData *level);

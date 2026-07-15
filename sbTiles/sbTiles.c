@@ -13,6 +13,7 @@ void sbTilesInit(int windowWidth, int windowHeight) {
   sbt.selectedTile = 30;
 
   sbt.showTileLines = true;
+  sbt.showAllLayers = false;
 
   sbt.cam.target = (Vector2){windowWidth / 2, windowHeight / 2};
   sbt.cam.offset = sbt.cam.target;
@@ -26,11 +27,17 @@ void sbTilesInit(int windowWidth, int windowHeight) {
 void updateCamera() {
   int scroll = GetMouseWheelMove();
 
-  if (scroll > 0) {
+  if (scroll > 0 && sbt.cam.zoom < 1.5) {
     sbt.cam.zoom += 0.05;
     sbt.cam.target = worldMouse;
-  } else if (scroll < 0 && sbt.cam.zoom >= 0.1) {
-    sbt.cam.zoom -= 0.1;
+  } else if (scroll < 0 && sbt.cam.zoom >= 0.2) {
+    sbt.cam.zoom -= 0.05;
+  }
+
+  // Reset cam to original
+  if (IsKeyPressed(KEY_R)) {
+    sbt.cam.target = sbt.cam.offset;
+    sbt.cam.zoom = 1.0;
   }
 }
 
@@ -47,33 +54,48 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
     sbt.showTileLines = !sbt.showTileLines;
   }
 
-  // Placing tiles
-  if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-    Vector2 currentLevelSize = {
-        currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
-        currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
-    Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
-    int y, x;
-    if (CheckCollisionPointRec(worldMouse, level)) {
-      x = worldMouse.x / sbt.currentDrawSize.x;
-      y = worldMouse.y / sbt.currentDrawSize.y;
-      currentLevel->layer[sbt.currentLayer].data[y][x] = sbt.selectedTile;
-    }
+  // Show all layers
+  if (IsKeyPressed(KEY_L)) {
+    sbt.showAllLayers = !sbt.showAllLayers;
   }
 
-  // Removing Tiles
-  else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-    Vector2 currentLevelSize = {
-        currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
-        currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
-    Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
-    int y, x;
-    x = worldMouse.x / sbt.currentDrawSize.x;
-    y = worldMouse.y / sbt.currentDrawSize.y;
+  // Placing tiles
+  if (!sbt.showAllLayers) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+      Vector2 currentLevelSize = {
+          currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
+          currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
+      Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
+      int y, x;
+      if (CheckCollisionPointRec(worldMouse, level)) {
+        x = worldMouse.x / sbt.currentDrawSize.x;
+        y = worldMouse.y / sbt.currentDrawSize.y;
+        currentLevel->layer[sbt.currentLayer].data[y][x] = sbt.selectedTile;
+      }
+    }
 
-    if (CheckCollisionPointRec(worldMouse, level) &&
-        currentLevel->layer[sbt.currentLayer].data[y][x] >= 0) {
-      currentLevel->layer[sbt.currentLayer].data[y][x] = -1;
+    // Removing Tiles
+    else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+      Vector2 currentLevelSize = {
+          currentLevel->layer[sbt.currentLayer].cols * sbt.currentDrawSize.x,
+          currentLevel->layer[sbt.currentLayer].rows * sbt.currentDrawSize.y};
+      Rectangle level = {0, 0, currentLevelSize.x, currentLevelSize.y};
+      int y, x;
+      x = worldMouse.x / sbt.currentDrawSize.x;
+      y = worldMouse.y / sbt.currentDrawSize.y;
+
+      if (CheckCollisionPointRec(worldMouse, level) &&
+          currentLevel->layer[sbt.currentLayer].data[y][x] >= 0) {
+        currentLevel->layer[sbt.currentLayer].data[y][x] = -1;
+      }
+    }
+
+    // Change layers
+    if (IsKeyPressed(KEY_UP) &&
+        sbt.currentLayer <= currentLevel->layerCount - 1) {
+      sbt.currentLayer++;
+    } else if (IsKeyPressed(KEY_DOWN) && sbt.currentLayer > 0) {
+      sbt.currentLayer--;
     }
   }
 }
@@ -115,6 +137,7 @@ void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
 
   case LEVEL_EDITING:
     levelEditingUpdate(currentLevel, mousePos);
+
     if (IsKeyPressed(KEY_F2)) {
       sbt.currentState = TILE_SELECTION;
     }
@@ -156,12 +179,16 @@ void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
 
   case LEVEL_EDITING:
 
+    DrawText((TextFormat("%d", sbt.currentLayer)), 0, 0, 50, RED);
+
     BeginMode2D(sbt.cam);
 
-    levelDataDraw(currentLevel, drawTileWidth, drawTileHeight);
+    levelDataDraw(currentLevel, drawTileWidth, drawTileHeight,
+                  sbt.showAllLayers ? -1 : sbt.currentLayer);
 
     sbt.currentDrawSize = (Vector2){drawTileWidth, drawTileHeight};
 
+    // Grid lines
     if (sbt.showTileLines) {
 
       for (int i = 0; i < currentLevel.layer[sbt.currentLayer].rows; i++) {

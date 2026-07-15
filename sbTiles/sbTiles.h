@@ -16,6 +16,7 @@ typedef struct {
   Camera2D cam;
 
   bool showTileLines;
+  bool showAllLayers;
 
   int selectedTile;
 
