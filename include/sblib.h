@@ -153,7 +153,7 @@ typedef struct {
 
 } LevelData; // Level Data struct
 
-// Initliaze level data struct
+// Initliaze level data struct f
 LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
                         int arrayCols);
 
