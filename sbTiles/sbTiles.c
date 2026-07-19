@@ -59,6 +59,8 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
     sbt.showAllLayers = !sbt.showAllLayers;
   }
 
+  // filler
+
   // Placing tiles
   if (!sbt.showAllLayers) {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
