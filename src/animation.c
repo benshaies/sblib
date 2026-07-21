@@ -1,14 +1,18 @@
 #include "../include/sblib.h"
 
-void animationInit(Animation *animation, float timer, Texture2D texture,
-                   int size, int frameCount, int currentFrame, int yPos) {
+SB_Animation SB_Animation_Init(Texture2D texture, int frameSize, int frameCount,
+                               int spriteSheetRow) {
 
-  animation->timer = timer;
-  animation->texture = texture;
-  animation->size = size;
-  animation->frameCount = frameCount;
-  animation->currentFrame = currentFrame;
-  animation->yPos = yPos;
+  SB_Animation animation;
+
+  animation.timer = 0;
+  animation.texture = texture;
+  animation.frameSize = frameSize;
+  animation.frameCount = frameCount;
+  animation.currentFrame = 0;
+  animation.spriteSheetRow = spriteSheetRow;
+
+  return animation;
 }
 
 void playAnimation(Animation *animation, Rectangle destination, int direction,

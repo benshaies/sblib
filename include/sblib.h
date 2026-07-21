@@ -7,38 +7,38 @@
 typedef struct {
   int *data; // Main array
   int size;  // Total size
-} intArray;
+} SB_IntArray;
 
 typedef struct {
   int **data; // Main Array
   int rows;
   int cols;
-} intArray2D; // 2D int array carring size
+} SB_IntArray2D; // 2D int array carring size
 
 // Initliaze and allocate intArray
-void intArrayInit(intArray *array, int size);
+void SB_IntArray_Init(SB_IntArray *array, int size);
 
 // Free intArray memory
-void freeIntArray(intArray *array);
+void SB_IntArray_Free(SB_IntArray *array);
 
 // Initliaze and allocate intArray2D
-void intArray2DInit(intArray2D *array, int rows, int cols);
+void SB_IntArray2D_Init(SB_IntArray2D *array, int rows, int cols);
 
 // Free intArray2D memory
-void freeIntArray2DInit(intArray2D *array);
+void SB_IntArray2D_Free(SB_IntArray2D *array);
 
 // Convert a csv file into an integer array
-void csvToArray(intArray2D *array, const char *filename);
+void SB_CsvToArray(SB_IntArray2D *array, const char *filename);
 
 // CAMERA FUNCTIONS
 // ****************************************************************8
-void updateCameraShake(Camera2D *cam, int *screenShakeLenght,
-                       int screenShakeStrenght, Vector2 windowSize);
+void SB_CameraShake_Update(Camera2D *cam, int *screenShakeLenght,
+                           int screenShakeStrenght, Vector2 windowSize);
 
 // DRAWING ****************************************************************
 
-void gameResolutionDraw(Vector2 windowSize, RenderTexture2D *target,
-                        Vector2 *mousePos);
+void SB_GameResolution_Draw(Vector2 windowSize, RenderTexture2D *target,
+                            Vector2 *mousePos);
 
 // TIMED EVENT ****************************************************************
 
@@ -49,26 +49,26 @@ typedef struct {
   bool particlesTriggered; // Has particles been triggered?
 
   Sound soundEffect; // Sound effect triggered?
-} timedEvent;        // Simple event with a time delay and tracking
+} SB_TimedEvent;     // Simple event with a time delay and tracking
 
 // Reset and or Initliaze timedEvent
-void resetTimedEvent(timedEvent *event, float delay, Sound soundEffect);
+void SB_TimedEvent_Reset(SB_TimedEvent *event, float delay, Sound soundEffect);
 
 // Update timedEvent
-bool updateTimedEvent(timedEvent *event);
+bool SB_TimedEvent_Update(SB_TimedEvent *event);
 
 // PARTICLES
 // ********************************************************************
 
-#define MAX_PARTICLES 1024
+#define SB_MAX_PARTICLES 1024
 
 typedef enum {
-  NORMAL,         // Normal square or cirlces
-  EXPANDING_RING, // Circular expanding ring
-} ParticleType;
+  SB_PARTICLE_NORMAL, // Normal square or cirlces
+  SB_PARTICLE_RING,   // Circular expanding ring
+} SB_ParticleType;
 
 typedef struct {
-  ParticleType type;
+  SB_ParticleType type;
 
   // Normal particle variables
   Vector2 pos;
@@ -83,26 +83,27 @@ typedef struct {
   float expandingRate;
   float ringThickness;
 
-} Particle;
+} SB_Particle;
 
 typedef struct {
-  Particle pool[MAX_PARTICLES];
-} ParticleSystem;
+  SB_Particle pool[SB_MAX_PARTICLES];
+} SB_ParticleSystem;
 
 // Spawn normal particles
-void spawnParticles(ParticleSystem *ps, Vector2 pos, float lifeMax, Color color,
-                    Vector2 velocity, float size);
+void SB_ParticleSystem_Spawn(SB_ParticleSystem *ps, Vector2 pos, float lifeMax,
+                             Color color, Vector2 velocity, float size);
 
 // Spawn expanding ring particle
-void spawnParticlesExpandingRing(ParticleSystem *ps, Vector2 pos, float lifeMax,
-                                 Color color, float size, float expandingRate,
-                                 float ringThickness);
+void SB_ParticleSystem_SpawnExpandingRing(SB_ParticleSystem *ps, Vector2 pos,
+                                          float lifeMax, Color color,
+                                          float size, float expandingRate,
+                                          float ringThickness);
 
 // Update all particles
-void updateParticles(ParticleSystem *ps);
+void SB_ParticleSystem_Update(SB_ParticleSystem *ps);
 
 // Draw all particles
-void drawParticles(ParticleSystem *ps);
+void SB_ParticleSystem_Draw(SB_ParticleSystem *ps);
 
 // ANIMATIONS
 // **********************************************************************
@@ -110,28 +111,28 @@ void drawParticles(ParticleSystem *ps);
 typedef struct {
   float timer; // Tracks time
   Texture2D texture;
-  int size;       // pixel size of each frame
+  int frameSize;  // pixel size of each frame
   int frameCount; //  Total frames
   int currentFrame;
   int direction;
-  int yPos; // Y position on sprite sheet
-} Animation;
+  int spriteSheetRow; // Y position on sprite sheet
+} SB_Animation;
 
 // Create animation
-void animationInit(Animation *animation, float timer, Texture2D texture,
-                   int size, int frameCount, int currentFrame, int yPos);
+SB_Animation SB_Animation_Init(Texture2D texture, int frameSize, int frameCount,
+                               int spriteSheetRow);
 
 // Play and draw animation
-void playAnimation(Animation *animation, Rectangle destination, int direction,
-                   float speed);
+void SB_Animation_Play(SB_Animation *animation, Rectangle destination,
+                       int direction, float speed);
 
 // Draw one specific frame from animation
-void drawAnimatrionFrame(Animation *animation, Rectangle destination,
-                         int direction, int frameNum);
+void SB_Animation_DrawFrame(SB_Animation *animation, Rectangle destination,
+                            int direction, int frameNum);
 
 // Play animation once and return true when done
-bool playAnimationOnce(Animation *animation, Rectangle destination,
-                       int direction, float speed);
+bool SB_Animation_PlayOnce(SB_Animation *animation, Rectangle destination,
+                           int direction, float speed);
 
 // LEVEL DATA - levelData.c
 // *************************************************************************
@@ -143,31 +144,30 @@ typedef struct {
 
   int tileSize;
 
-} Tileset; // Tileset variable
+} SB_Tileset; // Tileset variable
 
 typedef struct {
-  intArray2D *layer;
+  SB_IntArray2D *layer;
 
   int layerCount;
-  Tileset tileset;
+  SB_Tileset tileset;
 
-} LevelData; // Level Data struct
+} SB_Level; // Level Data struct
 
 // Initliaze level data struct f
-LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
-                        int arrayCols);
-
-// Load level data from file
+SB_Level SB_Level_Init(int layers, SB_Tileset tileset, int arrayRows,
+                       int arrayCols);
 
 // Draw level Data - specificLayer meaning -1:Draw normally | anything else
 // draw specific Layer only
-void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight,
+void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
                    int drawLayer);
 
 // Free level data
-void levelDataFree(LevelData *level);
+void SB_Level_Free(SB_Level *level);
 
 // Initliaze tileset struct
-Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize);
+SB_Tileset SB_Tileset_Init(Texture2D texture, int width, int height,
+                           int tileSize);
 
 #endif
