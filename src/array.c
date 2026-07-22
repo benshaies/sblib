@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void intArrayInit(intArray *array, int size) {
+void SB_IntArray_Init(SB_IntArray *array, int size) {
   array->data = malloc(sizeof(int) * size);
   array->size = size;
 
@@ -11,13 +11,13 @@ void intArrayInit(intArray *array, int size) {
   }
 }
 
-void intArrayFree(intArray *array) {
+void SB_IntArray_Free(SB_IntArray *array) {
   free((array->data));
   array->data = NULL;
   array->size = 0;
 }
 
-void intArray2DInit(intArray2D *array, int rows, int cols) {
+void SB_IntArray2D_Init(SB_IntArray2D *array, int rows, int cols) {
   array->rows = rows;
   array->cols = cols;
   array->data = malloc(sizeof(int *) * rows);
@@ -32,7 +32,7 @@ void intArray2DInit(intArray2D *array, int rows, int cols) {
   }
 }
 
-void intArray2DFree(intArray2D *array) {
+void SB_IntArray2D_Free(SB_IntArray2D *array) {
   if (array == NULL || array->data == NULL)
     return;
 
@@ -51,7 +51,7 @@ void intArray2DFree(intArray2D *array) {
   array->cols = 0;
 }
 
-void csvToArray(intArray2D *array, const char *filename) {
+void SB_CsvToArray(SB_IntArray2D *array, const char *filename) {
   FILE *file = fopen(filename, "r");
   if (!file) {
     printf("Failed to open %s\n", filename);
