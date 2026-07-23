@@ -1,13 +1,13 @@
 #include "../include/sblib.h"
 #include "stdio.h"
 
-void spawnParticles(ParticleSystem *ps, Vector2 pos, float lifeMax, Color color,
-                    Vector2 velocity, float size) {
+void SB_ParticleSystem_Spawn(SB_ParticleSystem *ps, Vector2 pos, float lifeMax,
+                             Color color, Vector2 velocity, float size) {
 
-  for (int i = 0; i < MAX_PARTICLES; i++) {
+  for (int i = 0; i < SB_MAX_PARTICLES; i++) {
 
     if (!ps->pool[i].active) {
-      ps->pool[i] = (Particle){
+      ps->pool[i] = (SB_Particle){
           .pos = pos,
           .life = lifeMax,
           .lifeMax = lifeMax,
@@ -15,21 +15,21 @@ void spawnParticles(ParticleSystem *ps, Vector2 pos, float lifeMax, Color color,
           .velocity = velocity,
           .size = size,
           .active = true,
-          .type = NORMAL,
+          .type = SB_PARTICLE_NORMAL,
       };
       return;
     }
   }
 }
 
-void spawnParticlesExpandingRing(ParticleSystem *ps, Vector2 pos, float lifeMax,
-                                 Color color, float size, float expandingRate,
-                                 float ringThickness) {
+void SB_ParticleSystem_SpawnExpandingRing(SB_ParticleSystem *ps, Vector2 pos,
+                                          float lifeMax, Color color,
+                                          float size, float expandingRate,
+                                          float ringThickness) {
 
-  for (int i = 0; i < MAX_PARTICLES; i++) {
-
+  for (int i = 0; i < SB_MAX_PARTICLES; i++) {
     if (!ps->pool[i].active) {
-      ps->pool[i] = (Particle){
+      ps->pool[i] = (SB_Particle){
           .active = true,
           .pos = pos,
           .life = lifeMax,
@@ -39,15 +39,16 @@ void spawnParticlesExpandingRing(ParticleSystem *ps, Vector2 pos, float lifeMax,
           .expandingRate = expandingRate,
           .ringThickness = ringThickness,
           .velocity = (Vector2){0, 0},
-          .type = EXPANDING_RING,
+          .type = SB_PARTICLE_RING,
       };
       return;
     }
   }
 }
 
-void updateParticles(ParticleSystem *ps) {
-  for (int i = 0; i < MAX_PARTICLES; i++) {
+void SB_ParticleSystem_Update(SB_ParticleSystem *ps) {
+
+  for (int i = 0; i < SB_MAX_PARTICLES; i++) {
 
     if (!ps->pool[i].active)
       continue;
@@ -60,7 +61,7 @@ void updateParticles(ParticleSystem *ps) {
 
     ps->pool[i].life -= GetFrameTime();
 
-    if (ps->pool[i].type == EXPANDING_RING) {
+    if (ps->pool[i].type == SB_PARTICLE_RING) {
       ps->pool[i].size += ps->pool[i].expandingRate;
     }
 
@@ -70,18 +71,19 @@ void updateParticles(ParticleSystem *ps) {
   }
 }
 
-void drawParticles(ParticleSystem *ps) {
-  for (int i = 0; i < MAX_PARTICLES; i++) {
+void SB_ParticleSystem_Draw(SB_ParticleSystem *ps) {
+
+  for (int i = 0; i < SB_MAX_PARTICLES; i++) {
     if (!ps->pool[i].active)
       continue;
 
     switch (ps->pool[i].type) {
-    case NORMAL:
+    case SB_PARTICLE_NORMAL:
       // DrawCircleV(ps->pool[i].pos, ps->pool[i].size, ps->pool[i].color);
       DrawRectangle(ps->pool[i].pos.x, ps->pool[i].pos.y, ps->pool[i].size,
                     ps->pool[i].size, ps->pool[i].color);
       break;
-    case EXPANDING_RING:
+    case SB_PARTICLE_RING:
       DrawRing(ps->pool[i].pos,
                ps->pool[i].size - (ps->pool[i].ringThickness *
                                    (ps->pool[i].life / ps->pool[i].lifeMax)),

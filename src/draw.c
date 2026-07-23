@@ -1,8 +1,8 @@
 #include "../include/sblib.h"
 #include "math.h"
 
-void gameResolutionDraw(Vector2 windowSize, RenderTexture2D *target,
-                        Vector2 *mousePos) {
+void SB_GameResolution_Draw(Vector2 windowSize, RenderTexture2D *target,
+                            Vector2 *mousePos) {
   BeginDrawing();
   ClearBackground(WHITE);
 

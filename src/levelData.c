@@ -2,13 +2,13 @@
 #include <raylib.h>
 #include <stdlib.h>
 
-LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
-                        int arrayCols) {
-  LevelData levelData;
+SB_Level SB_Level_Init(int layers, SB_Tileset tileset, int arrayRows,
+                       int arrayCols) {
+  SB_Level levelData;
   levelData.layerCount = layers;
   levelData.tileset = tileset;
 
-  levelData.layer = malloc(layers * sizeof(intArray2D));
+  levelData.layer = malloc(layers * sizeof(SB_IntArray2D));
   for (int i = 0; i < layers; i++) {
     intArray2DInit(&levelData.layer[i], arrayRows, arrayCols);
   }
@@ -16,7 +16,7 @@ LevelData levelDataInit(int layers, Tileset tileset, int arrayRows,
   return levelData;
 }
 
-void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight,
+void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
                    int drawLayer) {
 
   bool noLayering = false;
@@ -48,7 +48,7 @@ void levelDataDraw(LevelData level, int drawTileWidth, int drawTileHeight,
   }
 }
 
-void levelDataFree(LevelData *level) {
+void SB_Level_Free(SB_Level *level) {
   for (int i = 0; i < level->layerCount; i++) {
     free(level->layer[i].data);
     level->layer[i].data = NULL;
@@ -59,8 +59,9 @@ void levelDataFree(LevelData *level) {
   level->layerCount = 0;
 }
 
-Tileset tilesetInit(Texture2D texture, int width, int height, int tileSize) {
-  Tileset tileset;
+SB_Tileset SB_Tileset_Init(Texture2D texture, int width, int height,
+                           int tileSize) {
+  SB_Tileset tileset;
 
   tileset.texture = texture;
   tileset.width = width;

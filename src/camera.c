@@ -2,8 +2,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
-void updateCameraShake(Camera2D *camera, int *screenShakeLenght,
-                       int screenShakeStrenght, Vector2 windowSize) {
+void SB_CameraShake_Update(Camera2D *camera, int *screenShakeLenght,
+                           int screenShakeStrenght, Vector2 windowSize) {
   if (screenShakeLenght > 0) {
     screenShakeLenght--;
     camera->offset =
