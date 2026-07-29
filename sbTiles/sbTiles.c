@@ -7,7 +7,7 @@ SBTILES sbt;
 int scroll;
 Vector2 worldMouse;
 
-void sbTilesInit(int windowWidth, int windowHeight) {
+void SBTILES_Init(int windowWidth, int windowHeight) {
   sbt.currentDrawSize = (Vector2){0, 0};
   sbt.currentLayer = 0;
   sbt.selectedTile = 30;
@@ -41,7 +41,7 @@ void updateCamera() {
   }
 }
 
-void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
+void levelEditingUpdate(SB_Level *currentLevel, Vector2 mousePos) {
 
   // update mouse position
   worldMouse = GetScreenToWorld2D(GetMousePosition(), sbt.cam);
@@ -102,7 +102,7 @@ void levelEditingUpdate(LevelData *currentLevel, Vector2 mousePos) {
   }
 }
 
-void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
+void tileSelectionUpdate(SB_Level *currentLevel, Vector2 mousePos) {
   if (IsKeyDown(KEY_UP)) {
     sbt.tileSelectionRec.width *= 1.025;
     sbt.tileSelectionRec.height *= 1.025;
@@ -128,7 +128,7 @@ void tileSelectionUpdate(LevelData *currentLevel, Vector2 mousePos) {
   }
 }
 
-void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
+void SBTILES_Update(SB_Level *currentLevel, Vector2 mousePos) {
   switch (sbt.currentState) {
   case TILE_SELECTION:
     if (IsKeyPressed(KEY_F2)) {
@@ -149,7 +149,7 @@ void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos) {
 }
 
 // Drawing tilesecxtion
-void drawTileset(LevelData currentLevel) {
+void drawTileset(SB_Level currentLevel) {
 
   Rectangle sourceRec = {
       0, 0, currentLevel.tileset.width * currentLevel.tileset.tileSize,
@@ -171,8 +171,8 @@ void drawTileset(LevelData currentLevel) {
   DrawRectangleRec(highlightRec, Fade(BLUE, 0.5));
 }
 
-void sbTilesDraw(LevelData currentLevel, int drawTileWidth,
-                 int drawTileHeight) {
+void SBTILES_Draw(SB_Level currentLevel, int drawTileWidth,
+                  int drawTileHeight) {
 
   switch (sbt.currentState) {
   case TILE_SELECTION:

@@ -7,7 +7,6 @@
 typedef enum {
   TILE_SELECTION,
   LEVEL_EDITING,
-
 } SBT_STATE;
 
 typedef struct {
@@ -27,12 +26,12 @@ typedef struct {
 } SBTILES;
 
 // Initialize sbTiles struct
-void sbTilesInit(int windowWidth, int windowHeight);
+void SBTILES_Init(int windowWidth, int windowHeight);
 
 // All main updates to sbTiles
-void sbTilesUpdate(LevelData *currentLevel, Vector2 mousePos);
+void SBTILES_Update(SB_Level *currentLevel, Vector2 mousePos);
 
 // All drawing to sbTiles
-void sbTilesDraw(LevelData currentLevel, int drawTileWidth, int drawTileHeight);
+void SBTILES_Draw(SB_Level currentLevel, int drawTileWidth, int drawTileHeight);
 
 #endif
