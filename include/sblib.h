@@ -170,6 +170,6 @@ void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
 // Free level data
 void SB_Level_Free(SB_Level *level);
 
-void SB_Level_Save(SB_Level *level);
+void SB_Level_Save(SB_Level level, const char *filename);
 
 #endif

@@ -60,6 +60,8 @@ void SB_Level_Free(SB_Level *level) {
   level->layerCount = 0;
 }
 
+void SB_Level_Save(SB_Level level, const char *filename) {}
+
 SB_Tileset SB_Tileset_Init(const char *texturePath, int tileSize) {
   SB_Tileset tileset;
 

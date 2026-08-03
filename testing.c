@@ -3,21 +3,14 @@
 #include <raylib.h>
 #include <stdio.h>
 
-LevelData level;
-
-Tileset tileset;
 Texture2D tilesetTexture;
 
 Camera2D cam;
-
-intArray array;
 
 void draw() {
   BeginDrawing();
 
   ClearBackground(RAYWHITE);
-
-  sbTilesDraw(level, 100, 100);
 
   EndDrawing();
 }
@@ -27,12 +20,6 @@ void init() {
   SetTargetFPS(60);
 
   tilesetTexture = LoadTexture("../levelTileset.png");
-
-  tileset = tilesetInit(tilesetTexture, 8, 8, 16);
-
-  level = levelDataInit(5, tileset, 50, 50);
-
-  sbTilesInit(1000, 1000);
 }
 
 int main() {
@@ -40,8 +27,6 @@ int main() {
   init();
   while (!WindowShouldClose()) {
     draw();
-
-    sbTilesUpdate(&level, GetMousePosition());
   }
 
   return 0;
