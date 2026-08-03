@@ -138,13 +138,18 @@ bool SB_Animation_PlayOnce(SB_Animation *animation, Rectangle destination,
 // *************************************************************************
 
 typedef struct {
+  char texturePath[256];
   Texture2D texture;
-  int width;
-  int height;
+  int width;  // How many tiles wide
+  int height; // How many tiles tall
 
   int tileSize;
 
 } SB_Tileset; // Tileset variable
+
+// Initliaze tileset struct
+SB_Tileset SB_Tileset_Init(Texture2D texture, int width, int height,
+                           int tileSize);
 
 typedef struct {
   SB_IntArray2D *layer;
@@ -166,8 +171,6 @@ void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
 // Free level data
 void SB_Level_Free(SB_Level *level);
 
-// Initliaze tileset struct
-SB_Tileset SB_Tileset_Init(Texture2D texture, int width, int height,
-                           int tileSize);
+void SB_Level_Save(SB_Level *level);
 
 #endif
