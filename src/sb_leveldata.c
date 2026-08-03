@@ -1,6 +1,7 @@
 #include "../include/sblib.h"
 #include <raylib.h>
 #include <stdlib.h>
+#include <string.h>
 
 SB_Level SB_Level_Init(int layers, SB_Tileset tileset, int arrayRows,
                        int arrayCols) {
@@ -34,8 +35,8 @@ void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
           continue;
 
         Rectangle sourceRec = {
-            (tile % level.tileset.width) * level.tileset.tileSize,
-            (tile / level.tileset.width) * level.tileset.tileSize,
+            (tile % level.tileset.cols) * level.tileset.tileSize,
+            (tile / level.tileset.cols) * level.tileset.tileSize,
             level.tileset.tileSize,
             level.tileset.tileSize,
         };
@@ -59,14 +60,14 @@ void SB_Level_Free(SB_Level *level) {
   level->layerCount = 0;
 }
 
-SB_Tileset SB_Tileset_Init(Texture2D texture, int width, int height,
-                           int tileSize) {
+SB_Tileset SB_Tileset_Init(const char *texturePath, int tileSize) {
   SB_Tileset tileset;
 
-  tileset.texture = texture;
-  tileset.width = width;
-  tileset.height = height;
+  tileset.texture = LoadTexture(texturePath);
+  strcpy(tileset.texturePath, texturePath);
   tileset.tileSize = tileSize;
+  tileset.cols = tileset.texture.width / tileset.tileSize;
+  tileset.rows = tileset.texture.height / tileset.tileSize;
 
   return tileset;
 }
