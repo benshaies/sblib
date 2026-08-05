@@ -115,14 +115,14 @@ void tileSelectionUpdate(SB_Level *currentLevel, Vector2 mousePos) {
   if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
       CheckCollisionPointRec(mousePos, sbt.tileSelectionRec)) {
     int currentTileWidth =
-        sbt.tileSelectionRec.width / currentLevel->tileset.width;
+        sbt.tileSelectionRec.width / currentLevel->tileset.cols;
     int currentTileHeight =
-        sbt.tileSelectionRec.height / currentLevel->tileset.height;
+        sbt.tileSelectionRec.height / currentLevel->tileset.rows;
 
     int col = (int)(mousePos.x - sbt.tileSelectionRec.x) / currentTileWidth;
     int row = (int)(mousePos.y - sbt.tileSelectionRec.y) / currentTileHeight;
 
-    int selectedTile = row * currentLevel->tileset.width + col;
+    int selectedTile = row * currentLevel->tileset.cols + col;
 
     sbt.selectedTile = selectedTile;
   }
@@ -152,20 +152,20 @@ void SBTILES_Update(SB_Level *currentLevel, Vector2 mousePos) {
 void drawTileset(SB_Level currentLevel) {
 
   Rectangle sourceRec = {
-      0, 0, currentLevel.tileset.width * currentLevel.tileset.tileSize,
-      currentLevel.tileset.height * currentLevel.tileset.tileSize};
+      0, 0, currentLevel.tileset.cols * currentLevel.tileset.tileSize,
+      currentLevel.tileset.rows * currentLevel.tileset.tileSize};
 
   DrawTexturePro(currentLevel.tileset.texture, sourceRec, sbt.tileSelectionRec,
                  (Vector2){0, 0}, 0.0, WHITE);
 
   // Highlight current selected Tile
   Rectangle highlightRec = {
-      (sbt.selectedTile % currentLevel.tileset.width) *
-          (sbt.tileSelectionRec.width / currentLevel.tileset.width),
-      (sbt.selectedTile / currentLevel.tileset.width) *
-          (sbt.tileSelectionRec.height / currentLevel.tileset.height),
-      sbt.tileSelectionRec.width / currentLevel.tileset.width,
-      sbt.tileSelectionRec.height / currentLevel.tileset.height,
+      (sbt.selectedTile % currentLevel.tileset.cols) *
+          (sbt.tileSelectionRec.width / currentLevel.tileset.cols),
+      (sbt.selectedTile / currentLevel.tileset.cols) *
+          (sbt.tileSelectionRec.height / currentLevel.tileset.rows),
+      sbt.tileSelectionRec.width / currentLevel.tileset.cols,
+      sbt.tileSelectionRec.height / currentLevel.tileset.rows,
   };
 
   DrawRectangleRec(highlightRec, Fade(BLUE, 0.5));
