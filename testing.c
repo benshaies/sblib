@@ -3,9 +3,7 @@
 #include <raylib.h>
 #include <stdio.h>
 
-Texture2D tilesetTexture;
-
-Camera2D cam;
+SB_Level level;
 
 void draw() {
   BeginDrawing();
@@ -18,16 +16,13 @@ void draw() {
 void init() {
   InitWindow(1000, 1000, "sbLib Testing");
   SetTargetFPS(60);
-
-  tilesetTexture = LoadTexture("../levelTileset.png");
 }
 
 int main() {
 
   init();
-  while (!WindowShouldClose()) {
-    draw();
-  }
+
+  SB_Level_Save(level, "../testing.sblevel");
 
   return 0;
 }

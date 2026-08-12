@@ -186,7 +186,7 @@ void SBTILES_Draw(SB_Level currentLevel, int drawTileWidth,
 
     BeginMode2D(sbt.cam);
 
-    levelDataDraw(currentLevel, drawTileWidth, drawTileHeight,
+    SB_Level_Draw(currentLevel, drawTileWidth, drawTileHeight,
                   sbt.showAllLayers ? -1 : sbt.currentLayer);
 
     sbt.currentDrawSize = (Vector2){drawTileWidth, drawTileHeight};
