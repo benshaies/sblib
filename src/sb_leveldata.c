@@ -1,5 +1,6 @@
 #include "../include/sblib.h"
 #include <raylib.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -60,7 +61,28 @@ void SB_Level_Free(SB_Level *level) {
   level->layerCount = 0;
 }
 
-void SB_Level_Save(SB_Level level, const char *filename) {}
+void saveIntArray2D(FILE *file, SB_IntArray2D array) {
+  fwrite(&array.cols, sizeof(int), 1, file);
+  fwrite(&array.rows, sizeof(int), 1, file);
+
+  for (int y = 0; y < array.rows; y++) {
+    fwrite(array.data[y], sizeof(int), array.cols, file);
+  }
+}
+
+void SB_Level_Save(SB_Level level, const char *filename) {
+  FILE *file = fopen(filename, "wb");
+  if (file == NULL) {
+    printf("File Open Failed");
+    return false;
+  }
+
+  // First rows and cols
+  fwrite(level.layer->cols, sizeof(int), 1, file);
+  fwrite(level.layer->rows, sizeof(int), 1, file);
+
+  // Then the array
+}
 
 SB_Tileset SB_Tileset_Init(const char *texturePath, int tileSize) {
   SB_Tileset tileset;
