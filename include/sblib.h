@@ -172,4 +172,6 @@ void SB_Level_Free(SB_Level *level);
 
 void SB_Level_Save(SB_Level level, const char *filename);
 
+SB_Level SB_Level_Load(const char *filepath);
+
 #endif

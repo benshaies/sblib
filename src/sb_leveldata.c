@@ -63,6 +63,7 @@ void SB_Level_Free(SB_Level *level) {
   UnloadTexture(level->tileset.texture);
 }
 
+// Saving Functions
 void saveIntArray2D(FILE *file, SB_IntArray2D array) {
   fwrite(&array.cols, sizeof(int), 1, file);
   fwrite(&array.rows, sizeof(int), 1, file);
@@ -72,23 +73,91 @@ void saveIntArray2D(FILE *file, SB_IntArray2D array) {
   }
 }
 
-void saveTileset(FILE *file, SB_Tileset tileset) {}
+void saveTileset(FILE *file, SB_Tileset tileset) {
+
+  int len = strlen(tileset.texturePath);
+
+  fwrite(&len, sizeof(int), 1, file);
+
+  fwrite(tileset.texturePath, sizeof(char), len + 1, file);
+
+  fwrite(&tileset.tileSize, sizeof(int), 1, file);
+}
 
 void SB_Level_Save(SB_Level level, const char *filename) {
   FILE *file = fopen(filename, "wb");
 
   if (file == NULL) {
-    printf("FILE FAILED TO LOAD");
+    printf("FILE FAILED TO OPEN");
     return;
   }
 
+  // Level Array Saving
   fwrite(&level.layerCount, sizeof(int), 1, file);
 
   for (int l = 0; l < level.layerCount; l++) {
     saveIntArray2D(file, level.layer[l]);
   }
 
+  // Saving tileset
+  saveTileset(file, level.tileset);
+
   fclose(file);
+}
+
+// Loading functions
+SB_IntArray2D loadIntArray2D(FILE *file) {
+  SB_IntArray2D array;
+
+  fread(&array.cols, sizeof(int), 1, file);
+  fread(&array.rows, sizeof(int), 1, file);
+
+  array.data = malloc(sizeof(int *) * array.rows);
+  for (int i = 0; i < array.rows; i++) {
+    array.data[i] = malloc(sizeof(int) * array.cols);
+    fread(array.data[i], sizeof(int), array.cols, file);
+  }
+
+  return array;
+}
+
+SB_Tileset loadTileset(FILE *file) {
+  SB_Tileset tileset;
+  int len;
+
+  fread(&len, sizeof(int), 1, file);
+  fread(tileset.texturePath, sizeof(char), len + 1, file);
+  fread(&tileset.tileSize, sizeof(int), 1, file);
+
+  tileset.texture = LoadTexture(tileset.texturePath);
+  tileset.cols = tileset.texture.width / tileset.tileSize;
+  tileset.rows = tileset.texture.height / tileset.tileSize;
+
+  return tileset;
+}
+
+SB_Level SB_Level_Load(const char *filepath) {
+  FILE *file = fopen(filepath, "rb");
+
+  SB_Level level;
+
+  if (file == NULL) {
+    printf("FILE FAILED TO OPEN");
+    return level;
+  }
+
+  fread(&level.layerCount, sizeof(int), 1, file);
+
+  level.layer = malloc(sizeof(SB_IntArray2D) * level.layerCount);
+  for (int l = 0; l < level.layerCount; l++) {
+    level.layer[l] = loadIntArray2D(file);
+  }
+
+  level.tileset = loadTileset(file);
+
+  fclose(file);
+
+  return level;
 }
 
 SB_Tileset SB_Tileset_Init(const char *texturePath, int tileSize) {
