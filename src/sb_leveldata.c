@@ -75,13 +75,19 @@ void saveIntArray2D(FILE *file, SB_IntArray2D array) {
 
 void saveTileset(FILE *file, SB_Tileset tileset) {
 
-  int len = strlen(tileset.texturePath);
+  if ((tileset.tileSize > 0)) {
+    int len = strlen(tileset.texturePath);
 
-  fwrite(&len, sizeof(int), 1, file);
+    fwrite(&len, sizeof(int), 1, file);
 
-  fwrite(tileset.texturePath, sizeof(char), len + 1, file);
+    fwrite(tileset.texturePath, sizeof(char), len + 1, file);
 
-  fwrite(&tileset.tileSize, sizeof(int), 1, file);
+    fwrite(&tileset.tileSize, sizeof(int), 1, file);
+  } else {
+    tileset.rows = 0;
+    tileset.cols = 0;
+    tileset.tileSize = 0;
+  }
 }
 
 void SB_Level_Save(SB_Level level, const char *filename) {
@@ -139,10 +145,10 @@ SB_Tileset loadTileset(FILE *file) {
 SB_Level SB_Level_Load(const char *filepath) {
   FILE *file = fopen(filepath, "rb");
 
-  SB_Level level;
+  SB_Level level = {0};
 
-  if (file == NULL) {
-    printf("FILE FAILED TO OPEN");
+  if (!file) {
+    printf("FILE FAILED TO OPEN: %s\n", filepath);
     return level;
   }
 
