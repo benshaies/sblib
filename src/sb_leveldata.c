@@ -141,13 +141,12 @@ SB_Tileset loadTileset(FILE *file, bool sbTilesLoading) {
     // Format the string safely, ensuring null termination and max length
     snprintf(path, sizeof(path), "assets/%s", tileset.fileName);
     tileset.texture = LoadTexture(path);
+    tileset.cols = tileset.texture.width / tileset.tileSize;
+    tileset.rows = tileset.texture.height / tileset.tileSize;
   } else {
     printf("SBTILES LOADING : Need to Load Tileset Texture Yourself !\n");
     printf("Use 'tileset.filename'\n");
   }
-
-  tileset.cols = tileset.texture.width / tileset.tileSize;
-  tileset.rows = tileset.texture.height / tileset.tileSize;
 
   return tileset;
 }
