@@ -138,7 +138,7 @@ bool SB_Animation_PlayOnce(SB_Animation *animation, Rectangle destination,
 // *************************************************************************
 
 typedef struct {
-  char texturePath[256];
+  char fileName[256];
   Texture2D texture;
   int rows;
   int cols;
@@ -148,7 +148,7 @@ typedef struct {
 } SB_Tileset; // Tileset variable
 
 // Initliaze tileset struct
-SB_Tileset SB_Tileset_Init(const char *texurePath, int tileSize);
+SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize);
 
 typedef struct {
   SB_IntArray2D *layer;
@@ -172,6 +172,6 @@ void SB_Level_Free(SB_Level *level);
 
 void SB_Level_Save(SB_Level level, const char *filename);
 
-SB_Level SB_Level_Load(const char *filepath);
+SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading);
 
 #endif

@@ -76,11 +76,11 @@ void saveIntArray2D(FILE *file, SB_IntArray2D array) {
 void saveTileset(FILE *file, SB_Tileset tileset) {
 
   if ((tileset.tileSize > 0)) {
-    int len = strlen(tileset.texturePath);
+    int len = strlen(tileset.fileName);
 
     fwrite(&len, sizeof(int), 1, file);
 
-    fwrite(tileset.texturePath, sizeof(char), len + 1, file);
+    fwrite(tileset.fileName, sizeof(char), len + 1, file);
 
     fwrite(&tileset.tileSize, sizeof(int), 1, file);
   } else {
@@ -127,22 +127,32 @@ SB_IntArray2D loadIntArray2D(FILE *file) {
   return array;
 }
 
-SB_Tileset loadTileset(FILE *file) {
+SB_Tileset loadTileset(FILE *file, bool sbTilesLoading) {
   SB_Tileset tileset;
   int len;
 
   fread(&len, sizeof(int), 1, file);
-  fread(tileset.texturePath, sizeof(char), len + 1, file);
+  fread(tileset.fileName, sizeof(char), len + 1, file);
   fread(&tileset.tileSize, sizeof(int), 1, file);
 
-  tileset.texture = LoadTexture(tileset.texturePath);
+  if (!sbTilesLoading) {
+
+    char path[256];
+    // Format the string safely, ensuring null termination and max length
+    snprintf(path, sizeof(path), "assets/%s", tileset.fileName);
+    tileset.texture = LoadTexture(path);
+  } else {
+    printf("SBTILES LOADING : Need to Load Tileset Texture Yourself !\n");
+    printf("Use 'tileset.filename'\n");
+  }
+
   tileset.cols = tileset.texture.width / tileset.tileSize;
   tileset.rows = tileset.texture.height / tileset.tileSize;
 
   return tileset;
 }
 
-SB_Level SB_Level_Load(const char *filepath) {
+SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {
   FILE *file = fopen(filepath, "rb");
 
   SB_Level level = {0};
@@ -159,18 +169,22 @@ SB_Level SB_Level_Load(const char *filepath) {
     level.layer[l] = loadIntArray2D(file);
   }
 
-  level.tileset = loadTileset(file);
+  level.tileset = loadTileset(file, sbTilesLoading);
 
   fclose(file);
 
   return level;
 }
 
-SB_Tileset SB_Tileset_Init(const char *texturePath, int tileSize) {
+SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize) {
   SB_Tileset tileset;
 
-  tileset.texture = LoadTexture(texturePath);
-  strcpy(tileset.texturePath, texturePath);
+  char path[256];
+  strcpy(tileset.fileName, fileName);
+
+  snprintf(path, sizeof(path), "assets/%s", tileset.fileName);
+  tileset.texture = LoadTexture(path);
+
   tileset.tileSize = tileSize;
   tileset.cols = tileset.texture.width / tileset.tileSize;
   tileset.rows = tileset.texture.height / tileset.tileSize;
