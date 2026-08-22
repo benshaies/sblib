@@ -1,5 +1,6 @@
 #include "../include/sblib.h"
 #include <raylib.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -96,7 +97,66 @@ void SB_Level_Save(SB_Level level, const char *filename) {
 }
 
 // Loading function
-SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {}
+SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {
+  FILE *file;
+  file = fopen(filepath, "r");
+
+  SB_Level level = {0};
+
+  if (file == NULL) {
+    printf("SB_LEVEL LOADING ERROR: Unable to Open / Find file\n");
+    level.emptyReturn = true;
+    return level;
+  }
+
+  int tempLayerCount;
+  int tempTileSize;
+  char tempFileName[256];
+  int tempArrayRows;
+  int tempArrayCols;
+
+  fscanf(file, "LAYER_COUNT: %d\n", &tempLayerCount);
+
+  fscanf(file, "TILESET_FILENAME: %63[^\n]\n", tempFileName);
+  fscanf(file, "TILESET_TILESIZE: %d\n", &tempTileSize);
+
+  fscanf(file, "ARRAY_ROWS: %d\n", &tempArrayRows);
+  fscanf(file, "ARRAY_COLS: %d\n", &tempArrayCols);
+
+  level.layerCount = tempLayerCount;
+
+  if (!sbTilesLoading) {
+    level.tileset = SB_Tileset_Init(tempFileName, tempTileSize);
+  } else {
+    strcpy(level.tileset.fileName, tempFileName);
+    level.tileset.tileSize = tempTileSize;
+    printf("\nSBTILES LOADING: Tileset not loading | Please load yourself");
+  }
+
+  // Allocating memory for array data
+  level.layer = malloc(tempLayerCount * sizeof(SB_IntArray2D));
+  for (int i = 0; i < level.layerCount; i++) {
+    SB_IntArray2D_Init(&level.layer[i], tempArrayRows, tempArrayCols);
+    level.layer[i].rows = tempArrayRows;
+    level.layer[i].cols = tempArrayCols;
+  }
+
+  for (int i = 0; i < level.layerCount; i++) {
+    char layerHeader[32];
+    fscanf(file, " %31[^:]:", layerHeader);
+
+    for (int row = 0; row < tempArrayRows; row++) {
+      for (int col = 0; col < tempArrayCols; col++) {
+        int value;
+        fscanf(file, "%d,", &value);
+        level.layer[i].data[row][col] = value;
+      }
+    }
+  }
+  printf("SB_LEVEL FILE LOADED: SUCCESS\n");
+
+  return level;
+}
 
 SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize) {
   SB_Tileset tileset;

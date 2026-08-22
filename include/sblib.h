@@ -156,6 +156,8 @@ typedef struct {
   int layerCount;
   SB_Tileset tileset;
 
+  bool emptyReturn;
+
 } SB_Level; // Level Data struct
 
 // Initliaze level data struct f
@@ -170,6 +172,7 @@ void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
 // Free level data
 void SB_Level_Free(SB_Level *level);
 
+// Saves and Frees SB_Level
 void SB_Level_Save(SB_Level level, const char *filename);
 
 SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading);
