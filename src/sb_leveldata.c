@@ -130,7 +130,7 @@ SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {
   } else {
     strcpy(level.tileset.fileName, tempFileName);
     level.tileset.tileSize = tempTileSize;
-    printf("\nSBTILES LOADING: Tileset not loading | Please load yourself");
+    printf("\nSBTILES LOADING: Tileset not loaded | Please load yourself\n");
   }
 
   // Allocating memory for array data
