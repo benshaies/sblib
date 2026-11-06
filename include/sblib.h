@@ -150,23 +150,25 @@ typedef struct {
 // Initliaze tileset struct
 SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize);
 
+void SB_Tileset_Free(SB_Tileset *tileset);
+
 typedef struct {
   SB_IntArray2D *layer;
-
   int layerCount;
-  SB_Tileset tileset;
-
   bool emptyReturn;
+
+  char tilesetName[256];
+  int tileSize;
 
 } SB_Level; // Level Data struct
 
 // Initliaze level data struct f
-SB_Level SB_Level_Init(int layers, SB_Tileset tileset, int arrayRows,
-                       int arrayCols);
+SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
+                       const char *tilesetName, int tileSize);
 
 // Draw level Data - specificLayer meaning -1:Draw normally | anything else
 // draw specific Layer only
-void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
+void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight,
                    int drawLayer);
 
 // Free level data
@@ -175,6 +177,6 @@ void SB_Level_Free(SB_Level *level);
 // Saves and Frees SB_Level
 void SB_Level_Save(SB_Level level, const char *filename);
 
-SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading);
+SB_Level SB_Level_Load(const char *filepath);
 
 #endif

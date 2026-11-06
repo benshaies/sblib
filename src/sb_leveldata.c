@@ -5,21 +5,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-SB_Level SB_Level_Init(int layers, SB_Tileset tileset, int arrayRows,
-                       int arrayCols) {
+SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
+                       const char *tilesetName, int tileSize) {
   SB_Level levelData;
   levelData.layerCount = layers;
-  levelData.tileset = tileset;
 
   levelData.layer = malloc(layers * sizeof(SB_IntArray2D));
   for (int i = 0; i < layers; i++) {
     SB_IntArray2D_Init(&levelData.layer[i], arrayRows, arrayCols);
   }
 
+  strcpy(levelData.tilesetName, tilesetName);
+  levelData.tileSize = tileSize;
+
   return levelData;
 }
 
-void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
+void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight,
                    int drawLayer) {
 
   bool noLayering = false;
@@ -37,12 +39,12 @@ void SB_Level_Draw(SB_Level level, int drawTileWidth, int drawTileHeight,
           continue;
 
         Rectangle sourceRec = {
-            (tile % level.tileset.cols) * level.tileset.tileSize,
-            (tile / level.tileset.cols) * level.tileset.tileSize,
-            level.tileset.tileSize,
-            level.tileset.tileSize,
+            (tile % tileset.cols) * tileset.tileSize,
+            (tile / tileset.cols) * tileset.tileSize,
+            tileset.tileSize,
+            tileset.tileSize,
         };
-        DrawTexturePro(level.tileset.texture, sourceRec,
+        DrawTexturePro(tileset.texture, sourceRec,
                        (Rectangle){j * drawTileWidth, i * drawTileHeight,
                                    drawTileWidth, drawTileHeight},
                        (Vector2){0, 0}, 0.0f, WHITE);
@@ -61,7 +63,6 @@ void SB_Level_Free(SB_Level *level) {
   level->layer = NULL;
   level->layerCount = 0;
 
-  UnloadTexture(level->tileset.texture);
 }
 
 // Saving Function
@@ -71,8 +72,8 @@ void SB_Level_Save(SB_Level level, const char *filename) {
   file = fopen(filename, "w");
 
   fprintf(file, "LAYER_COUNT: %d", level.layerCount);
-  fprintf(file, "\nTILESET_FILENAME: %s", level.tileset.fileName);
-  fprintf(file, "\nTILESET_TILESIZE: %d", level.tileset.tileSize);
+  fprintf(file, "\nTILESET_FILENAME: %s", level.tilesetName);
+  fprintf(file, "\nTILESET_TILESIZE: %d", level.tileSize);
   fprintf(file, "\nARRAY_ROWS: %d", level.layer->rows);
   fprintf(file, "\nARRAY_COLS: %d", level.layer->cols);
 
@@ -97,7 +98,7 @@ void SB_Level_Save(SB_Level level, const char *filename) {
 }
 
 // Loading function
-SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {
+SB_Level SB_Level_Load(const char *filepath) {
   FILE *file;
   file = fopen(filepath, "r");
 
@@ -124,14 +125,6 @@ SB_Level SB_Level_Load(const char *filepath, bool sbTilesLoading) {
   fscanf(file, "ARRAY_COLS: %d\n", &tempArrayCols);
 
   level.layerCount = tempLayerCount;
-
-  if (!sbTilesLoading) {
-    level.tileset = SB_Tileset_Init(tempFileName, tempTileSize);
-  } else {
-    strcpy(level.tileset.fileName, tempFileName);
-    level.tileset.tileSize = tempTileSize;
-    printf("\nSBTILES LOADING: Tileset not loaded | Please load yourself\n");
-  }
 
   // Allocating memory for array data
   level.layer = malloc(tempLayerCount * sizeof(SB_IntArray2D));
@@ -172,4 +165,8 @@ SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize) {
   tileset.rows = tileset.texture.height / tileset.tileSize;
 
   return tileset;
+}
+
+void SB_Tileset_Free(SB_Tileset *tileset){
+  UnloadTexture(tileset->texture);
 }
