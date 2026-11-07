@@ -146,25 +146,34 @@ SB_Level SB_Level_Load(const char *filepath) {
       }
     }
   }
+
+  level.tileSize = tempTileSize;
+  strcpy(level.tilesetName, tempFileName);
+
   printf("SB_LEVEL FILE LOADED: SUCCESS\n");
 
   return level;
 }
 
-SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize) {
-  SB_Tileset tileset;
+SB_Tileset SB_Tileset_Init(const char *assetDir, const char *fileName, int tileSize) {
+    SB_Tileset tileset = {0};
 
-  char path[256];
-  strcpy(tileset.fileName, fileName);
+    snprintf(tileset.fileName, sizeof(tileset.fileName), "%s", fileName);
 
-  snprintf(path, sizeof(path), "assets/%s", tileset.fileName);
-  tileset.texture = LoadTexture(path);
+    char path[512];
+    snprintf(path, sizeof(path), "%s/%s", assetDir, fileName);
+    tileset.texture = LoadTexture(path);
 
-  tileset.tileSize = tileSize;
-  tileset.cols = tileset.texture.width / tileset.tileSize;
-  tileset.rows = tileset.texture.height / tileset.tileSize;
+    if (tileset.texture.id == 0 || tileSize <= 0) {
+        TraceLog(LOG_ERROR, "SB_Tileset: failed to load %s", path);
+        return tileset;
+    }
 
-  return tileset;
+    tileset.tileSize = tileSize;
+    tileset.cols = tileset.texture.width / tileSize;
+    tileset.rows = tileset.texture.height / tileSize;
+
+    return tileset;
 }
 
 void SB_Tileset_Free(SB_Tileset *tileset){

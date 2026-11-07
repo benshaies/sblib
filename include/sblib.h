@@ -148,7 +148,7 @@ typedef struct {
 } SB_Tileset; // Tileset variable
 
 // Initliaze tileset struct
-SB_Tileset SB_Tileset_Init(const char *fileName, int tileSize);
+SB_Tileset SB_Tileset_Init(const char *assetDir, const char *fileName, int tileSize);
 
 void SB_Tileset_Free(SB_Tileset *tileset);
 
