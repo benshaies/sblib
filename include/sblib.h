@@ -36,9 +36,9 @@ void SB_CameraShake_Update(Camera2D *cam, int *screenShakeLenght,
                            int screenShakeStrenght, Vector2 windowSize);
 
 // DRAWING ****************************************************************
+void SB_GameResolution_Draw(Vector2 windowSize, RenderTexture2D *target);
 
-void SB_GameResolution_Draw(Vector2 windowSize, RenderTexture2D *target,
-                            Vector2 *mousePos);
+Vector2 SB_GameResolution_GetMouse(Vector2 windowSize);
 
 // TIMED EVENT ****************************************************************
 
@@ -136,6 +136,12 @@ bool SB_Animation_PlayOnce(SB_Animation *animation, Rectangle destination,
 
 // LEVEL DATA - levelData.c
 // *************************************************************************
+
+typedef struct{
+  Rectangle *bounds;
+}SB_CollisionRec;
+
+
 
 typedef struct {
   char fileName[256];
