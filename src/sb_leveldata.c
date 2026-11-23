@@ -63,19 +63,21 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
   int startLayer = noLayering ? drawLayer : 0;
   int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
 
-  for (int l = startLayer; l < endLayer; l++) {
-    for (int i = 0; i < level.layer[l].rows; i++) {
-      for (int j = 0; j < level.layer[l].cols; j++) {
+  // Find new loop parameters based on rectangle
+  int startX = visibileArea.x * drawTileWidth;
+  int endX = (visibileArea.x + visibileArea.width) * drawTileWidth;
 
-        if(!CheckCollisionRecs((Rectangle){j * drawTileWidth, i * drawTileHeight, drawTileWidth, drawTileHeight}, visibileArea)){
-          continue;
-        }
+  int startY = visibileArea.y * drawTileHeight;
+  int endY = (visibileArea.y + visibileArea.height) * drawTileHeight;
 
-        int tile = level.layer[l].data[i][j];
+  for(int l = startLayer; l < endLayer; l++){
+
+    for(int y = startY; y < endY; y++){
+      for(int x = startX; x < endX; x++){
+
+        int tile = level.layer[l].data[y][x];
         if (tile < 0)
           continue;
-
-        
 
         Rectangle sourceRec = {
             (tile % tileset.cols) * tileset.tileSize,
@@ -84,13 +86,12 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
             tileset.tileSize,
         };
         DrawTexturePro(tileset.texture, sourceRec,
-                       (Rectangle){j * drawTileWidth, i * drawTileHeight,
+                       (Rectangle){x * drawTileWidth, y * drawTileHeight,
                                    drawTileWidth, drawTileHeight},
                        (Vector2){0, 0}, 0.0f, WHITE);
       }
     }
   }
-
 }
 
 void SB_Level_Free(SB_Level *level) {
