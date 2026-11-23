@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
                        const char *tilesetName, int tileSize) {
