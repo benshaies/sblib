@@ -54,7 +54,7 @@ void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int dr
   }
 }
 
-void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibileArea){
+void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibleArea){
 
   bool noLayering = false;
   if (drawLayer != -1)
@@ -63,12 +63,17 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
   int startLayer = noLayering ? drawLayer : 0;
   int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
 
-  // Find new loop parameters based on rectangle
-  int startX = visibileArea.x * drawTileWidth;
-  int endX = (visibileArea.x + visibileArea.width) * drawTileWidth;
+  int startX = (int)floorf(visibleArea.x / drawTileWidth);
+  int endX   = (int)ceilf((visibleArea.x + visibleArea.width) / drawTileWidth);
 
-  int startY = visibileArea.y * drawTileHeight;
-  int endY = (visibileArea.y + visibileArea.height) * drawTileHeight;
+  int startY = (int)floorf(visibleArea.y / drawTileHeight);
+  int endY   = (int)ceilf((visibleArea.y + visibleArea.height) / drawTileHeight);
+
+  // Clamp to the map (use your actual level dimension fields)
+  if (startX < 0) startX = 0;
+  if (startY < 0) startY = 0;
+  if (endX > level.layer->cols)  endX = level.layer->cols;
+  if (endY > level.layer->rows) endY = level.layer->rows;
 
   for(int l = startLayer; l < endLayer; l++){
 
