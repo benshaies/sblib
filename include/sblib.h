@@ -141,8 +141,6 @@ typedef struct{
   Rectangle *bounds;
 }SB_CollisionRec;
 
-
-
 typedef struct {
   char fileName[256];
   Texture2D texture;
@@ -176,6 +174,8 @@ SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
 // draw specific Layer only
 void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight,
                    int drawLayer);
+
+void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibileArea);
 
 // Free level data
 void SB_Level_Free(SB_Level *level);

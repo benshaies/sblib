@@ -21,6 +21,7 @@ SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
   return levelData;
 }
 
+
 void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight,
                    int drawLayer) {
 
@@ -51,6 +52,45 @@ void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int dr
       }
     }
   }
+}
+
+void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibileArea){
+
+  bool noLayering = false;
+  if (drawLayer != -1)
+    noLayering = true;
+
+  int startLayer = noLayering ? drawLayer : 0;
+  int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
+
+  for (int l = startLayer; l < endLayer; l++) {
+    for (int i = 0; i < level.layer[l].rows; i++) {
+      for (int j = 0; j < level.layer[l].cols; j++) {
+
+        if(!CheckCollisionRecs((Rectangle){j * drawTileWidth, i * drawTileHeight, drawTileWidth, drawTileHeight}, visibileArea)){
+          continue;
+        }
+
+        int tile = level.layer[l].data[i][j];
+        if (tile < 0)
+          continue;
+
+        
+
+        Rectangle sourceRec = {
+            (tile % tileset.cols) * tileset.tileSize,
+            (tile / tileset.cols) * tileset.tileSize,
+            tileset.tileSize,
+            tileset.tileSize,
+        };
+        DrawTexturePro(tileset.texture, sourceRec,
+                       (Rectangle){j * drawTileWidth, i * drawTileHeight,
+                                   drawTileWidth, drawTileHeight},
+                       (Vector2){0, 0}, 0.0f, WHITE);
+      }
+    }
+  }
+
 }
 
 void SB_Level_Free(SB_Level *level) {
