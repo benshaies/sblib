@@ -175,8 +175,17 @@ SB_Level SB_Level_Init(int layers, int arrayRows, int arrayCols,
 void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight,
                    int drawLayer);
 
+<<<<<<< HEAD
 void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibileArea);
 
+=======
+<<<<<<< Updated upstream
+=======
+// Draw level only in the "visible area" given
+void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibileArea);
+
+>>>>>>> Stashed changes
+>>>>>>> 398c4ea (Working draw visible function tested and working)
 // Free level data
 void SB_Level_Free(SB_Level *level);
 
