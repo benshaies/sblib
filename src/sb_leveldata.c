@@ -55,11 +55,6 @@ void SB_Level_Draw(SB_Level level, SB_Tileset tileset, int drawTileWidth, int dr
   }
 }
 
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> 398c4ea (Working draw visible function tested and working)
 void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth, int drawTileHeight, int drawLayer, Rectangle visibleArea){
 
   bool noLayering = false;
@@ -69,25 +64,7 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
   int startLayer = noLayering ? drawLayer : 0;
   int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
 
-<<<<<<< HEAD
-  int startX = (int)floorf(visibleArea.x / drawTileWidth);
-  int endX   = (int)ceilf((visibleArea.x + visibleArea.width) / drawTileWidth);
 
-  int startY = (int)floorf(visibleArea.y / drawTileHeight);
-  int endY   = (int)ceilf((visibleArea.y + visibleArea.height) / drawTileHeight);
-
-  // Clamp to the map (use your actual level dimension fields)
-  if (startX < 0) startX = 0;
-  if (startY < 0) startY = 0;
-  if (endX > level.layer->cols)  endX = level.layer->cols;
-  if (endY > level.layer->rows) endY = level.layer->rows;
-
-  for(int l = startLayer; l < endLayer; l++){
-
-    for(int y = startY; y < endY; y++){
-      for(int x = startX; x < endX; x++){
-
-=======
   int startX = (int)(visibleArea.x / drawTileWidth);
   int endX = (int)(startX + (visibleArea.width / drawTileWidth));
 
@@ -104,7 +81,6 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
     for(int y = startY; y < endY+1; y++){
       for(int x = startX; x < endX+1; x++){
         
->>>>>>> 398c4ea (Working draw visible function tested and working)
         int tile = level.layer[l].data[y][x];
         if (tile < 0)
           continue;
@@ -119,26 +95,21 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
                        (Rectangle){x * drawTileWidth, y * drawTileHeight,
                                    drawTileWidth, drawTileHeight},
                        (Vector2){0, 0}, 0.0f, WHITE);
-<<<<<<< HEAD
       }
     }
   }
 }
 
-=======
 
-      }
+      
 
-    }
-  }
-
-  printf("%d %d \n", startX, startY);
+    
+  
 
 
-}
 
->>>>>>> Stashed changes
->>>>>>> 398c4ea (Working draw visible function tested and working)
+
+
 void SB_Level_Free(SB_Level *level) {
   for (int i = 0; i < level->layerCount; i++) {
     free(level->layer[i].data);
