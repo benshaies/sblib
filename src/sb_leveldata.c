@@ -64,17 +64,18 @@ void SB_Level_Draw_Visible(SB_Level level, SB_Tileset tileset, int drawTileWidth
   int startLayer = noLayering ? drawLayer : 0;
   int endLayer = noLayering ? drawLayer + 1 : level.layerCount;
 
-
+  // Find index for current visible area
   int startX = (int)(visibleArea.x / drawTileWidth);
   int endX = (int)(startX + (visibleArea.width / drawTileWidth));
 
   int startY = (int)(visibleArea.y / drawTileHeight);
   int endY = (int)(startY + (visibleArea.height / drawTileHeight));
-
+  
+  // Check for out of bounds of array
   if(startX < 0) startX = 0;
   if(startY < 0) startY = 0;
-  if(endX > level.layer[0].cols) endX = level.layer[0].cols;
-  if(endY > level.layer[0].rows) endY = level.layer[0].rows;
+  if(endX > level.layer[0].cols - 1) endX = level.layer[0].cols - 1;
+  if(endY > level.layer[0].rows - 1) endY = level.layer[0].rows - 1;
 
   for(int l = startLayer; l < endLayer; l++){
 
